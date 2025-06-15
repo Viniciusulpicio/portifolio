@@ -146,12 +146,6 @@ function animate() {
       opacity = Math.max(0, opacity);
     }
 
-    const textoFade = document.getElementById('texto-fade');
-    if (scrollPercent >= 0.55) {
-      textoFade.style.opacity = '1';
-    } else {
-      textoFade.style.opacity = '0';
-    }
 
     model3D.traverse((child) => {
       if (child.isMesh && child.material) {
