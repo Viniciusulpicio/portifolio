@@ -2,11 +2,28 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 let scene = new THREE.Scene();
+const isMobile = window.innerWidth < 768;
 scene.background = new THREE.Color(0xb8a1f7);
 
+
 let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.set(0, 1, 5);
-camera.lookAt(0, 3.5, 0);
+
+// Função que ajusta a posição da câmera conforme a largura da tela
+function ajustarCameraParaTela() {
+  if (window.innerWidth < 768) {
+    camera.position.set(0, 1.5, 6); // Mais longe para telas pequenas
+  } else {
+    camera.position.set(0, 1, 5); // Padrão para desktop
+  }
+  camera.lookAt(0, 3.5, 0);
+}
+
+// Chama uma vez no início
+ajustarCameraParaTela();
+
+// E sempre que a janela for redimensionada
+window.addEventListener('resize', ajustarCameraParaTela);
+
 
 let renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -28,6 +45,9 @@ loader.load('./models/TVVIDEOFINAL.glb', (gltf) => {
   model3D.position.set(0, 0, 0);
   model3D.rotation.set(0, 0, 0);
   scene.add(model3D);
+if (isMobile) {
+  model3D.rotation.y = Math.PI / 2; // 90° de lado
+}
 
   const video = document.getElementById('video-texture');
   video.muted = true;  // Começa mudo
@@ -120,10 +140,17 @@ function animate() {
     const z = THREE.MathUtils.lerp(2, -6, scrollPercent);
     const x = THREE.MathUtils.lerp(0, -4, scrollPercent);
     const y = THREE.MathUtils.lerp(0, 6, scrollPercent);
-    const rotY = THREE.MathUtils.lerp(0, Math.PI / 2, scrollPercent);
 
     model3D.position.set(x, y, z);
-    model3D.rotation.y = rotY;
+
+    let targetRotY = 0;
+    if (isMobile) {
+      targetRotY = THREE.MathUtils.lerp(Math.PI / 2, 0, scrollPercent);
+    } else {
+      targetRotY = THREE.MathUtils.lerp(0, Math.PI / 2, scrollPercent);
+    }
+    model3D.rotation.y += (targetRotY - model3D.rotation.y) * 0.05;
+
 
     const targetRotationY = mouseX * 0.1;
     const targetRotationX = mouseY * 0.05;

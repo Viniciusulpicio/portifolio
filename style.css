@@ -46,3 +46,29 @@
   padding: 50px;
   color: #000;
 }
+
+@media (max-width: 768px) {
+  .texto-tv {
+    font-size: 1.5rem;
+    top: 40%;
+  }
+
+  .conteudo-normal {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .texto-tv {
+    font-size: 1.2rem;
+  }
+
+  #tv-container {
+    height: 100vh;
+  }
+}
+@media (max-width: 768px) {
+  .spacer {
+    height: 100vh;
+  }
+}
