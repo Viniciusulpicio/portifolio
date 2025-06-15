@@ -18,57 +18,36 @@ let dirLight = new THREE.DirectionalLight(0xffffff, 2);
 dirLight.position.set(3, 5, 2);
 scene.add(dirLight);
 
-// Modelo 3D
 let model3D = null;
+const objetosClicaveis = [];
 const loader = new GLTFLoader();
-// Após carregar o modelo
-loader.load('./models/TVVideoTeste.glb', (gltf) => {
+
+loader.load('./models/TVVIDEOFINAL.glb', (gltf) => {
   model3D = gltf.scene;
   model3D.scale.set(4, 4, 4);
   model3D.position.set(0, 0, 0);
   model3D.rotation.set(0, 0, 0);
   scene.add(model3D);
 
-  // MOSTRA OS NOMES DOS OBJETOS
+  const video = document.getElementById('video-texture');
+  video.muted = true;  // Começa mudo
+  video.play().catch((err) => console.warn('Erro no autoplay do vídeo:', err));
+
+  const videoTexture = new THREE.VideoTexture(video);
+  videoTexture.minFilter = THREE.LinearFilter;
+  videoTexture.magFilter = THREE.LinearFilter;
+  videoTexture.format = THREE.RGBAFormat;  // <-- Mude de RGBFormat para RGBAFormat
+  videoTexture.generateMipmaps = false;
+  videoTexture.encoding = THREE.sRGBEncoding;
+  videoTexture.flipY = false;  
+
+
   model3D.traverse((child) => {
     if (child.isMesh) {
-      console.log('Mesh:', child.name);
-
-    const video = document.getElementById('video-texture');
-
-    // Espera o clique do usuário para ativar som
-    window.addEventListener('click', () => {
-      video.muted = false;
-      video.volume = 1.0;
-      video.play().then(() => {
-        console.log('Vídeo com som reproduzindo');
-      }).catch((err) => {
-        console.warn('Erro ao tentar tocar vídeo com som:', err);
-      });
-    });
+      objetosClicaveis.push(child);
 
 
-      // Garante que o vídeo está mudo
-      video.muted = true;
-
-      // Tenta dar play
-      video.play().then(() => {
-        console.log('Vídeo reproduzindo');
-      }).catch((error) => {
-        console.warn('Falha ao dar play automático no vídeo:', error);
-      });
-      
-
-      const videoTexture = new THREE.VideoTexture(video);
-
-      if (child.name === 'TVBase_2_low001_TV_0') {
-        console.log('Aplicando textura no TV_0');
-      }
-      videoTexture.flipY = false;
-
-
-      if (child.name === 'TVBase_2_low001_TV_0001') {
-        console.log('Aplicando textura no TV_0001');
+      if (child.name === 'TVBase_2_low001_TV_0001' || child.name.includes('Screen')) {
         child.material = new THREE.MeshBasicMaterial({
           map: videoTexture,
           transparent: false,
@@ -78,26 +57,38 @@ loader.load('./models/TVVideoTeste.glb', (gltf) => {
       }
     }
   });
-
-  // Seleciona o vídeo
-  const video = document.getElementById('video-texture');
-
-  // Cria uma textura do vídeo
-  const videoTexture = new THREE.VideoTexture(video);
-  videoTexture.minFilter = THREE.LinearFilter;
-  videoTexture.magFilter = THREE.LinearFilter;
-  videoTexture.format = THREE.RGBFormat;
-
-  // Substitui o material da tela da TV
-  model3D.traverse((child) => {
-    if (child.isMesh && child.name.includes('Screen')) { // ajuste esse nome com base no log
-      child.material = new THREE.MeshBasicMaterial({ map: videoTexture });
-    }
-  });
-
 });
 
+// Raycaster para clique
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let somAtivado = false;
 
+renderer.domElement.addEventListener('click', (event) => {
+  if (somAtivado) return;
+
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(objetosClicaveis, true);
+
+  if (intersects.length > 0) {
+    console.log('Clicou na TV:', intersects[0].object.name);
+
+    const video = document.getElementById('video-texture');
+    video.muted = false;
+    video.volume = 1.0;
+    video.play().then(() => {
+      console.log('Som ativado!');
+      somAtivado = true;
+    }).catch((err) => {
+      console.warn('Erro ao ativar som:', err);
+    });
+  } else {
+    console.log('Clique fora da TV. Som não ativa.');
+  }
+});
 
 // Scroll tracking
 let scrollPercent = 0;
@@ -113,44 +104,39 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// Movimento suave baseado no mouse
-let mouseX = 0; // normalizado entre -1 e 1
+// Movimento baseado no mouse
+let mouseX = 0;
 let mouseY = 0;
 
 window.addEventListener('mousemove', (event) => {
   mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-  mouseY = -((event.clientY / window.innerHeight) * 2 - 1); // inverte para ficar intuitivo
+  mouseY = -((event.clientY / window.innerHeight) * 2 - 1);
 });
 
 function animate() {
   requestAnimationFrame(animate);
 
   if (model3D) {
-    // Movimento baseado no scroll (posição e rotação)
     const z = THREE.MathUtils.lerp(2, -6, scrollPercent);
     const x = THREE.MathUtils.lerp(0, -4, scrollPercent);
     const y = THREE.MathUtils.lerp(0, 6, scrollPercent);
     const rotY = THREE.MathUtils.lerp(0, Math.PI / 2, scrollPercent);
 
-    // Define posição e rotação base do scroll
     model3D.position.set(x, y, z);
     model3D.rotation.y = rotY;
 
-    // Movimento sutil adicional baseado no mouse
     const targetRotationY = mouseX * 0.1;
     const targetRotationX = mouseY * 0.05;
 
     const targetPosX = x + mouseX * 0.1;
     const targetPosY = y + mouseY * 0.05;
 
-    // Interpola suavemente para o alvo (lerp com fator 0.05)
     model3D.rotation.y += (targetRotationY - model3D.rotation.y) * 0.05;
     model3D.rotation.x += (targetRotationX - model3D.rotation.x) * 0.05;
 
     model3D.position.x += (targetPosX - model3D.position.x) * 0.05;
     model3D.position.y += (targetPosY - model3D.position.y) * 0.05;
 
-    // Fade-out no final do scroll (entre 50% e 100%)
     const fadeStart = 0.5;
     const fadeEnd = 1.0;
     let opacity = 1;
@@ -159,13 +145,13 @@ function animate() {
       opacity = 1 - (scrollPercent - fadeStart) / (fadeEnd - fadeStart);
       opacity = Math.max(0, opacity);
     }
-        const textoFade = document.getElementById('texto-fade');
 
-        if (scrollPercent >= 0.55) {
-        textoFade.style.opacity = '1';
-        } else {
-        textoFade.style.opacity = '0';
-        }
+    const textoFade = document.getElementById('texto-fade');
+    if (scrollPercent >= 0.55) {
+      textoFade.style.opacity = '1';
+    } else {
+      textoFade.style.opacity = '0';
+    }
 
     model3D.traverse((child) => {
       if (child.isMesh && child.material) {

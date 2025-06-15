@@ -16,17 +16,23 @@
 </head>
 <body>
   <div id="tv-container">
-  <video id="video-texture" src="./assets/video.mp4" autoplay loop playsinline style="display: none;"></video>
+    <!-- Aqui fica só o canvas + vídeo da TV -->
+    <video id="video-texture" src="./assets/video_final.mp4" autoplay loop muted playsinline style="display: none;"></video>
   </div>
 
+  <div id="texto-fade" class="texto-tv" style="opacity: 0; transition: opacity 1s ease;">
+    <h1>Bem-vindo ao meu Portfólio</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+  </div>
 
-<div id="texto-fade" class="texto-tv" style="opacity: 0; transition: opacity 1s ease;">
-  <h1>Bem-vindo ao meu Portfólio</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-</div>
+  <!-- A partir daqui, conteúdo normal -->
+  <section class="conteudo-normal">
+    <h2>Sobre Mim</h2>
+    <p>Esse é o restante do conteúdo HTML. Aqui os cliques não vão mais ativar o som da TV.</p>
+  </section>
 
-  
   <script type="module" src="script.js"></script>
 </body>
+
 </html>
 
