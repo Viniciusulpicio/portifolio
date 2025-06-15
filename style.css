@@ -1,0 +1,37 @@
+    body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    font-family: sans-serif;
+    background: #b1bdf6;
+    height: 200vh;
+    }
+
+    #tv-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    }
+
+    .texto-tv {
+    position: fixed;
+    top: 45%;
+    width: 100%;
+    text-align: center;
+    font-size: 2.5rem;
+    color: white;
+    z-index: 2;
+    pointer-events: none;
+    }
+
+    .nova-tela {
+    height: 200vh;
+    padding-top: 100vh;
+    background: linear-gradient(to bottom, #111, #eee);
+    z-index: 3;
+    position: relative;
+    text-align: center;
+    }
+
+    
