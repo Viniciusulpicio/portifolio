@@ -186,3 +186,14 @@ function animate() {
 }
 
 animate();
+
+
+document.querySelector(".menu-btn").addEventListener("click", () => {
+  const sidebar = document.getElementById("sidebar");
+  sidebar.classList.toggle("active");
+});
+document.querySelectorAll("#sidebar a").forEach(link => {
+  link.addEventListener("click", () => {
+    document.getElementById("sidebar").classList.remove("active");
+  });
+});
