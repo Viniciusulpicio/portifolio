@@ -1,11 +1,14 @@
-    body, html {
+ 
+ 
+ 
+ body, html {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    font-family: sans-serif;
+    font-family: 'Geologica', sans-serif;
     background: #b8a1f7;
     height: 200vh;
-    }
+}
 
 #tv-container {
   position: fixed;
@@ -105,23 +108,29 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: Arial, sans-serif;
+  font-family: 'Geologica', sans-serif;
 }
 
 /* Quando ativo, move o menu para a tela */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -40vw;
-  width: 40vh;
-  height: 100%;
+  left: -100%; /* Garante que ficará totalmente fora da tela */
+  width: 100vw;
+  height: 100vh;
   background-color: #333;
   color: #b8a1f7;
   transition: left 0.5s ease;
   z-index: 999;
   padding-top: 100px;
-  font-family: monospace;
+  font-family: 'Geologica', sans-serif;
+  overflow-y: auto;
 }
+
+.sidebar.active {
+  left: 0;
+}
+
 
 .sidebar ul {
   list-style: none;
@@ -152,6 +161,79 @@
   z-index: 0;
   pointer-events: none;
 }
+.sobre-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.sobre-texto {
+  flex: 1;
+}
+
+.sobre-texto p {
+  font-size: 25px;
+}
+
+.sobre-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.sobre-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 50px;
+  flex-wrap: wrap;
+}
+.sobre-texto {
+  flex: 1 1 400px;
+  max-width: 600px;
+  color: #1a1a1a;
+  font-family: 'Geologica', sans-serif;
+  font-size: 1.1rem;
+}
+
+.sobre-texto h2 {
+
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  
+}
+
+.titulo-sobre-wrapper {
+  width: 100%;
+  text-align: center;
+}
+
+.titulo-centralizado {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #1a1a1a;
+  color: #b8a1f7;
+  display: inline-block;
+  width: 20%;
+}
+
+
+.titulo-sobre {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #1a1a1a;
+  margin-bottom: 40px;
+  display: flex;
+}
+
+#vinil-container {
+  transition: opacity 0.5s ease;
+  opacity: 0;
+}
+
 
 
 
@@ -174,9 +256,25 @@
   #tv-container {
     height: 100vh;
   }
+
+  .titulo-centralizado {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #1a1a1a;
+  color: #b8a1f7;
+  display: inline-block;
+  width: 40%;
+}
 }
 @media (max-width: 768px) {
   .spacer {
     height: 100vh;
   }
 }
+
+
+
+
+
+

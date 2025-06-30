@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./style.css">
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica&display=swap" rel="stylesheet">
   <script type="importmap">
     {
       "imports": {
@@ -33,6 +34,7 @@
   </nav>
 
 <div class="sidebar" id="sidebar">
+  <button id="fechar-menu" style="position:absolute;top:20px;right:20px;font-size:32px;background:none;border:none;color:#b8a1f7;">×</button>
   <ul>
     <li><a href="#home">Sobre Mim</a></li>
     <li><a href="#about">Experiências</a></li>
@@ -47,12 +49,31 @@
 
   <div class="spacer"></div>
 
-  <!-- Aqui começa o conteúdo normal que você quer exibir -->
-  <section class="conteudo-normal">
-    <h2>Sobre Mim</h2>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et nisi praesentium veniam at optio dolorem tempore, impedit hic amet aut.
+<section class="conteudo-normal sobre-container">
+
+  <div class="titulo-sobre-wrapper">
+    <h2 class="titulo-centralizado">Sobre Mim</h2>
+  </div>
+
+  <div class="sobre-texto">
+    <p>
+      Meu nome é Vinicius Sulpicio e sou um desenvolvedor full stack apaixonado por programação. 
+      Trabalho nas principais linguagens, tecnologias e frameworks, como HTML, CSS, JavaScript, Node.js, 
+      SQL, MySQL, Flutter, e React.
     </p>
-  </section>
+    <p>
+      Possuo experiência prática em criação de sistemas web, APIs com Express e integração com banco de dados. 
+      Dê uma olhada logo abaixo em alguns dos projetos realizados durante meu processo de aprendizagem dentro 
+      desse mundo da programação.
+    </p>
+  </div>
+
+  <div id="vinil-container"></div>
+</section>
+
+
+
+  
 
   <script type="module" src="script.js"></script>
   <script>
