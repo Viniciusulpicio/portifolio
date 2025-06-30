@@ -5,6 +5,7 @@
   <title>Portfólio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./style.css">
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script type="importmap">
     {
       "imports": {
@@ -15,7 +16,7 @@
   </script>
 </head>
 <body>
-
+    <div id="particles-js"></div>
     <nav class="navbar">
     <button class="menu-btn"><img src="./image/fi-br-menu-burger.png" alt=""></button>
     <div class="social-icons">
@@ -41,11 +42,9 @@
 </div>
 
   <div id="tv-container">
-    <!-- canvas + vídeo da TV -->
     <video id="video-texture" src="./assets/video_final.mp4" autoplay loop muted playsinline style="display: none;"></video>
   </div>
 
-  <!-- NOVO: Div de transição para o conteúdo normal -->
   <div class="spacer"></div>
 
   <!-- Aqui começa o conteúdo normal que você quer exibir -->
@@ -56,6 +55,11 @@
   </section>
 
   <script type="module" src="script.js"></script>
+  <script>
+    particlesJS.load('particles-js', './particlesjs-config.json', function () {
+      console.log('Particles.js config carregado com sucesso!');
+    });
+  </script>
 </body>
 
 

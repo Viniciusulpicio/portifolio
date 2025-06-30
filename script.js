@@ -3,25 +3,22 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 let scene = new THREE.Scene();
 const isMobile = window.innerWidth < 768;
-scene.background = new THREE.Color(0xb8a1f7);
+scene.background = null; 
 
 
 let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
 
-// Função que ajusta a posição da câmera conforme a largura da tela
 function ajustarCameraParaTela() {
   if (window.innerWidth < 768) {
-    camera.position.set(0, 1.5, 6); // Mais longe para telas pequenas
+    camera.position.set(0, 1.5, 6); 
   } else {
-    camera.position.set(0, 1, 5); // Padrão para desktop
+    camera.position.set(0, 1, 5); 
   }
   camera.lookAt(0, 3.5, 0);
 }
 
-// Chama uma vez no início
 ajustarCameraParaTela();
 
-// E sempre que a janela for redimensionada
 window.addEventListener('resize', ajustarCameraParaTela);
 
 
