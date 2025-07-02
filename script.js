@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 //
 // === CENA PRINCIPAL (TV NO FUNDO) ===
@@ -27,7 +29,8 @@ ajustarCameraParaTela();
 window.addEventListener('resize', ajustarCameraParaTela);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+const alturaCanvas = document.getElementById('tv-container').clientHeight;
+renderer.setSize(window.innerWidth, alturaCanvas);
 document.getElementById('tv-container').appendChild(renderer.domElement);
 
 scene.add(new THREE.AmbientLight(0xffffff, 1.2));
@@ -105,8 +108,17 @@ renderer.domElement.addEventListener('click', (event) => {
 let scrollPercent = 0;
 window.addEventListener('scroll', () => {
   const maxScroll = document.body.scrollHeight - window.innerHeight;
-  scrollPercent = window.scrollY / maxScroll;
+  let scrollPercentRaw = window.scrollY / maxScroll;
+  
+  if (window.innerWidth < 768) {
+    // Para celular, limitamos para que o scrollPercent "conte" até 0.4, depois fica fixo
+    scrollPercent = Math.min(scrollPercentRaw / 0.4, 1);
+  } else {
+    // Para desktop, usa normal
+    scrollPercent = scrollPercentRaw;
+  }
 });
+
 
 // Mouse movimento
 let mouseX = 0;
@@ -152,14 +164,25 @@ function animate() {
     model3D.position.x += (targetPosX - model3D.position.x) * 0.05;
     model3D.position.y += (targetPosY - model3D.position.y) * 0.05;
 
-    const fadeStart = 0.5;
-    const fadeEnd = 1.0;
+
+    // Para celular, mantém como está
+    const fadeStartMobile = 0.5;
+    const fadeEndMobile = 1.0;
+
+    // Para desktop, acelera o fade para sumir mais rápido
+    const fadeStartDesktop = 0.3;  // começa a sumir mais cedo no desktop
+    const fadeEndDesktop = 0.6;    // termina sumir mais rápido no desktop
+
+    const fadeStart = isMobile ? fadeStartMobile : fadeStartDesktop;
+    const fadeEnd = isMobile ? fadeEndMobile : fadeEndDesktop;
+
     let opacity = 1;
 
     if (scrollPercent >= fadeStart) {
       opacity = 1 - (scrollPercent - fadeStart) / (fadeEnd - fadeStart);
       opacity = Math.max(0, opacity);
     }
+
 
     model3D.traverse((child) => {
       if (child.isMesh && child.material) {
@@ -245,3 +268,87 @@ document.querySelectorAll("#sidebar a").forEach(link => {
 document.getElementById("fechar-menu")?.addEventListener("click", () => {
   document.getElementById("sidebar").classList.remove("active");
 });
+
+// === CENA DO FOGUETE SOBRE A FORMAÇÃO ===
+const fogueteScene = new THREE.Scene();
+const fogueteCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+fogueteCamera.position.z = 10; // mais perto
+
+const fogueteRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+document.getElementById("formacao-foguete-container").appendChild(fogueteRenderer.domElement);
+
+function redimensionarFogueteCanvas() {
+  const largura = window.innerWidth * 0.6;
+  const altura = largura * 0.4;
+  fogueteRenderer.setSize(largura, altura);
+  fogueteCamera.aspect = largura / altura;
+  fogueteCamera.updateProjectionMatrix();
+}
+window.addEventListener("resize", redimensionarFogueteCanvas);
+redimensionarFogueteCanvas();
+
+const luzFoguete = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
+fogueteScene.add(luzFoguete);
+
+let fogueteModel = null;
+
+const curva = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(-10, -5, 0),
+  new THREE.Vector3(-4, -2.5, 0),
+  new THREE.Vector3(0, -1, 0),
+  new THREE.Vector3(4, -1.5, 0),
+  new THREE.Vector3(7, 0, 0),
+]);
+
+
+const loaderFoguete = new GLTFLoader();
+loaderFoguete.load('./models/foguete.glb', (gltf) => {
+  fogueteModel = gltf.scene;
+
+  // Garante visibilidade
+  fogueteModel.traverse(child => {
+    if (child.isMesh) {
+      child.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+      child.material.transparent = false;
+      child.material.opacity = 1;
+    }
+  });
+
+const isMobile = window.innerWidth < 768;
+fogueteModel.scale.set(isMobile ? 120 : 50, isMobile ? 120 : 50, isMobile ? 120 : 50);
+  fogueteScene.add(fogueteModel);
+}, undefined, (err) => {
+  console.error("Erro ao carregar foguete:", err);
+});
+
+let fogueteT = 0;
+let indo = true;
+
+function animateFoguete() {
+  requestAnimationFrame(animateFoguete);
+  if (fogueteModel) {
+    const pos = curva.getPointAt(fogueteT);
+    const tangent = curva.getTangentAt(fogueteT);
+
+    fogueteModel.position.copy(pos);
+    fogueteModel.lookAt(pos.clone().add(tangent));
+
+    if (indo) {
+      fogueteT += 0.002;
+      if (fogueteT >= 1) {
+        fogueteT = 1;
+        indo = false;
+      }
+    } else {
+      fogueteT -= 0.002;
+      if (fogueteT <= 0) {
+        fogueteT = 0;
+        indo = true;
+      }
+    }
+  }
+
+  fogueteRenderer.render(fogueteScene, fogueteCamera);
+}
+
+animateFoguete();
