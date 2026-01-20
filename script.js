@@ -1,7 +1,7 @@
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { FontLoader } from "three/addons/loaders/FontLoader.js";
+import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
 
 //
 // === CENA PRINCIPAL (TV NO FUNDO) ===
@@ -15,7 +15,7 @@ const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
-  100
+  100,
 );
 function ajustarCameraParaTela() {
   if (window.innerWidth < 768) {
@@ -26,23 +26,28 @@ function ajustarCameraParaTela() {
   camera.lookAt(0, 3.5, 0);
 }
 ajustarCameraParaTela();
-window.addEventListener('resize', ajustarCameraParaTela);
+window.addEventListener("resize", ajustarCameraParaTela);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-const alturaCanvas = document.getElementById('tv-container').clientHeight;
+const alturaCanvas = document.getElementById("tv-container").clientHeight;
 renderer.setSize(window.innerWidth, alturaCanvas);
-document.getElementById('tv-container').appendChild(renderer.domElement);
+document.getElementById("tv-container").appendChild(renderer.domElement);
 
 scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+const dirLight = new THREE.DirectionalLight(0xffffff, 3); // Increased intensity
 dirLight.position.set(3, 5, 2);
 scene.add(dirLight);
+const blueLight = new THREE.PointLight(0x302b63, 5, 50); // Ambient purple/blue fill
+blueLight.position.set(-2, 3, 5);
+scene.add(blueLight);
+
+// ... (rest of code)
 
 let model3D = null;
 const objetosClicaveis = [];
 
 const loader = new GLTFLoader();
-loader.load('./models/TVVIDEOFINAL.glb', (gltf) => {
+loader.load("./models/TVVIDEOFINAL.glb", (gltf) => {
   model3D = gltf.scene;
   model3D.scale.set(4, 4, 4);
   model3D.position.set(0, 0, 0);
@@ -51,9 +56,9 @@ loader.load('./models/TVVIDEOFINAL.glb', (gltf) => {
 
   if (isMobile) model3D.rotation.y = Math.PI / 2;
 
-  const video = document.getElementById('video-texture');
+  const video = document.getElementById("video-texture");
   video.muted = true;
-  video.play().catch((err) => console.warn('Erro no autoplay:', err));
+  video.play().catch((err) => console.warn("Erro no autoplay:", err));
 
   const videoTexture = new THREE.VideoTexture(video);
   videoTexture.minFilter = THREE.LinearFilter;
@@ -66,14 +71,14 @@ loader.load('./models/TVVIDEOFINAL.glb', (gltf) => {
     if (child.isMesh) {
       objetosClicaveis.push(child);
       if (
-        child.name === 'TVBase_2_low001_TV_0001' ||
-        child.name.includes('Screen')
+        child.name === "TVBase_2_low001_TV_0001" ||
+        child.name.includes("Screen")
       ) {
         child.material = new THREE.MeshBasicMaterial({
           map: videoTexture,
           transparent: false,
           opacity: 1,
-          side: THREE.FrontSide
+          side: THREE.FrontSide,
         });
       }
     }
@@ -85,7 +90,7 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let somAtivado = false;
 
-renderer.domElement.addEventListener('click', (event) => {
+renderer.domElement.addEventListener("click", (event) => {
   if (somAtivado) return;
 
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -95,21 +100,24 @@ renderer.domElement.addEventListener('click', (event) => {
   const intersects = raycaster.intersectObjects(objetosClicaveis, true);
 
   if (intersects.length > 0) {
-    const video = document.getElementById('video-texture');
+    const video = document.getElementById("video-texture");
     video.muted = false;
     video.volume = 1.0;
-    video.play().then(() => {
-      somAtivado = true;
-    }).catch((err) => console.warn('Erro ao ativar som:', err));
+    video
+      .play()
+      .then(() => {
+        somAtivado = true;
+      })
+      .catch((err) => console.warn("Erro ao ativar som:", err));
   }
 });
 
 // Scroll tracking
 let scrollPercent = 0;
-window.addEventListener('scroll', () => {
+window.addEventListener("scroll", () => {
   const maxScroll = document.body.scrollHeight - window.innerHeight;
   let scrollPercentRaw = window.scrollY / maxScroll;
-  
+
   if (window.innerWidth < 768) {
     // Para celular, limitamos para que o scrollPercent "conte" até 0.4, depois fica fixo
     scrollPercent = Math.min(scrollPercentRaw / 0.4, 1);
@@ -119,17 +127,16 @@ window.addEventListener('scroll', () => {
   }
 });
 
-
 // Mouse movimento
 let mouseX = 0;
 let mouseY = 0;
-window.addEventListener('mousemove', (event) => {
+window.addEventListener("mousemove", (event) => {
   mouseX = (event.clientX / window.innerWidth) * 2 - 1;
   mouseY = -((event.clientY / window.innerHeight) * 2 - 1);
 });
 
 // Responsividade
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -164,14 +171,13 @@ function animate() {
     model3D.position.x += (targetPosX - model3D.position.x) * 0.05;
     model3D.position.y += (targetPosY - model3D.position.y) * 0.05;
 
-
     // Para celular, mantém como está
     const fadeStartMobile = 0.5;
     const fadeEndMobile = 1.0;
 
     // Para desktop, acelera o fade para sumir mais rápido
-    const fadeStartDesktop = 0.3;  // começa a sumir mais cedo no desktop
-    const fadeEndDesktop = 0.6;    // termina sumir mais rápido no desktop
+    const fadeStartDesktop = 0.3; // começa a sumir mais cedo no desktop
+    const fadeEndDesktop = 0.6; // termina sumir mais rápido no desktop
 
     const fadeStart = isMobile ? fadeStartMobile : fadeStartDesktop;
     const fadeEnd = isMobile ? fadeEndMobile : fadeEndDesktop;
@@ -182,7 +188,6 @@ function animate() {
       opacity = 1 - (scrollPercent - fadeStart) / (fadeEnd - fadeStart);
       opacity = Math.max(0, opacity);
     }
-
 
     model3D.traverse((child) => {
       if (child.isMesh && child.material) {
@@ -196,7 +201,6 @@ function animate() {
 }
 animate();
 
-
 //
 // === CENA SECUNDÁRIA: VINIL GIRANDO NA DIV ===
 //
@@ -208,27 +212,34 @@ const vinilRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 function ajustarTamanhoVinil() {
   const tamanho = window.innerWidth * 0.22;
   vinilRenderer.setSize(tamanho, tamanho);
-  
-  vinilCamera.aspect = 1; 
+
+  vinilCamera.aspect = 1;
   vinilCamera.updateProjectionMatrix();
 }
 
-window.addEventListener('resize', ajustarTamanhoVinil);
+window.addEventListener("resize", ajustarTamanhoVinil);
 ajustarTamanhoVinil();
-document.getElementById("vinil-container").appendChild(vinilRenderer.domElement);
+document
+  .getElementById("vinil-container")
+  .appendChild(vinilRenderer.domElement);
 
 const vinilLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
 vinilScene.add(vinilLight);
 
 let vinilModelo = null;
 const vinilLoader = new GLTFLoader();
-vinilLoader.load('./models/12_vinyl_record.glb', (gltf) => {
-  vinilModelo = gltf.scene;
-  vinilModelo.scale.set(11.0, 11.0, 11.0);
-  vinilScene.add(vinilModelo);
-}, undefined, (err) => {
-  console.error('Erro ao carregar vinil:', err);
-});
+vinilLoader.load(
+  "./models/12_vinyl_record.glb",
+  (gltf) => {
+    vinilModelo = gltf.scene;
+    vinilModelo.scale.set(11.0, 11.0, 11.0);
+    vinilScene.add(vinilModelo);
+  },
+  undefined,
+  (err) => {
+    console.error("Erro ao carregar vinil:", err);
+  },
+);
 
 function animateVinil() {
   requestAnimationFrame(animateVinil);
@@ -239,47 +250,68 @@ function animateVinil() {
 }
 animateVinil();
 
-
 // Mostrar/ocultar o vinil quando a seção estiver visível
-const sobreSection = document.querySelector('.sobre-container');
-const vinilContainer = document.getElementById('vinil-container');
+const sobreSection = document.querySelector(".sobre-container");
+const vinilContainer = document.getElementById("vinil-container");
 
 const observer = new IntersectionObserver(
   (entries) => {
-    entries.forEach(entry => {
-      vinilContainer.style.opacity = entry.isIntersecting ? '1' : '0';
+    entries.forEach((entry) => {
+      vinilContainer.style.opacity = entry.isIntersecting ? "1" : "0";
     });
   },
-  { threshold: 0.3 }
+  { threshold: 0.3 },
 );
 observer.observe(sobreSection);
 
-
 // Menu lateral toggle
-document.querySelector(".menu-btn").addEventListener("click", () => {
-  const sidebar = document.getElementById("sidebar");
-  sidebar.classList.toggle("active");
+// Menu Mobile Logic
+const menuBtn = document.querySelector(".menu-btn");
+const sidebar = document.querySelector(".sidebar");
+const fecharMenu = document.getElementById("fechar-menu");
+const links = document.querySelectorAll(".sidebar ul li a");
+
+const toggleMenu = () => {
+  if (sidebar) sidebar.classList.toggle("active");
+};
+
+const closeMenu = () => {
+  if (sidebar) sidebar.classList.remove("active");
+};
+
+if (menuBtn) menuBtn.addEventListener("click", toggleMenu);
+if (fecharMenu) fecharMenu.addEventListener("click", closeMenu);
+
+links.forEach((link) => {
+  link.addEventListener("click", closeMenu);
 });
-document.querySelectorAll("#sidebar a").forEach(link => {
-  link.addEventListener("click", () => {
-    document.getElementById("sidebar").classList.remove("active");
-  });
-});
-document.getElementById("fechar-menu")?.addEventListener("click", () => {
-  document.getElementById("sidebar").classList.remove("active");
+
+// Close on ESC Key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && sidebar && sidebar.classList.contains("active")) {
+    closeMenu();
+  }
 });
 
 // === CENA DO FOGUETE SOBRE A FORMAÇÃO ===
+// === CENA DO FOGUETE SOBRE A FORMAÇÃO ===
 const fogueteScene = new THREE.Scene();
 const fogueteCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-fogueteCamera.position.z = 10; // mais perto
+fogueteCamera.position.z = 10; // Original distance
 
-const fogueteRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-document.getElementById("formacao-foguete-container").appendChild(fogueteRenderer.domElement);
+const fogueteRenderer = new THREE.WebGLRenderer({
+  alpha: true,
+  antialias: true,
+});
+document
+  .getElementById("formacao-foguete-container")
+  .appendChild(fogueteRenderer.domElement);
 
 function redimensionarFogueteCanvas() {
-  const largura = window.innerWidth * 0.6;
-  const altura = largura * 0.4;
+  const container = document.getElementById("formacao-foguete-container");
+  const largura = container.clientWidth;
+  // Keep the 300px overflow height to prevent clipping
+  const altura = 300; 
   fogueteRenderer.setSize(largura, altura);
   fogueteCamera.aspect = largura / altura;
   fogueteCamera.updateProjectionMatrix();
@@ -292,34 +324,51 @@ fogueteScene.add(luzFoguete);
 
 let fogueteModel = null;
 
-const curva = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(-10, -5, 0),
-  new THREE.Vector3(-4, -2.5, 0),
-  new THREE.Vector3(0, -1, 0),
-  new THREE.Vector3(4, -1.5, 0),
-  new THREE.Vector3(7, 0, 0),
-]);
+// isMobile already defined at top of file
 
+const curvePoints = isMobile ? [
+  new THREE.Vector3(-4, 0.5, 0),
+  new THREE.Vector3(-2, 0, 0),
+  new THREE.Vector3(0, -0.5, 0),
+  new THREE.Vector3(2, 0, 0),
+  new THREE.Vector3(4, 0.5, 0),
+] : [
+  new THREE.Vector3(-6, 0.5, 0),
+  new THREE.Vector3(-3, 0, 0),
+  new THREE.Vector3(0, -0.5, 0),
+  new THREE.Vector3(3, 0, 0),
+  new THREE.Vector3(6, 0.5, 0),
+];
+
+const curva = new THREE.CatmullRomCurve3(curvePoints);
 
 const loaderFoguete = new GLTFLoader();
-loaderFoguete.load('./models/foguete.glb', (gltf) => {
-  fogueteModel = gltf.scene;
+loaderFoguete.load(
+  "./models/foguete.glb",
+  (gltf) => {
+    fogueteModel = gltf.scene;
 
-  // Garante visibilidade
-  fogueteModel.traverse(child => {
-    if (child.isMesh) {
-      child.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-      child.material.transparent = false;
-      child.material.opacity = 1;
-    }
-  });
+    fogueteModel.traverse((child) => {
+      if (child.isMesh) {
+        child.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+        child.material.transparent = false;
+        child.material.opacity = 1;
+      }
+    });
 
-const isMobile = window.innerWidth < 768;
-fogueteModel.scale.set(isMobile ? 120 : 50, isMobile ? 120 : 50, isMobile ? 120 : 50);
-  fogueteScene.add(fogueteModel);
-}, undefined, (err) => {
-  console.error("Erro ao carregar foguete:", err);
-});
+    // Reverting to original scale
+    fogueteModel.scale.set(
+      isMobile ? 120 : 50,
+      isMobile ? 120 : 50,
+      isMobile ? 120 : 50,
+    );
+    fogueteScene.add(fogueteModel);
+  },
+  undefined,
+  (err) => {
+    console.error("Erro ao carregar foguete:", err);
+  },
+);
 
 let fogueteT = 0;
 let indo = true;
@@ -332,6 +381,7 @@ function animateFoguete() {
 
     fogueteModel.position.copy(pos);
     fogueteModel.lookAt(pos.clone().add(tangent));
+    // Removed manual rotation fixes as they were for the new model orientation logic
 
     if (indo) {
       fogueteT += 0.002;
@@ -350,5 +400,80 @@ function animateFoguete() {
 
   fogueteRenderer.render(fogueteScene, fogueteCamera);
 }
+
+// --- Scroll Animations ---
+const scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+        }
+    });
+}, {
+    threshold: 0.1
+});
+
+// Select elements to animate
+const hiddenElements = document.querySelectorAll('.sobre-texto, #vinil-container, .titulo, .item, .titulo-centralizado, .tech-marquee-container');
+hiddenElements.forEach((el) => {
+    el.classList.add('hidden'); // Add initial hidden state
+    scrollObserver.observe(el);
+});
+
+
+// --- Projects Hover Effect ---
+const items = document.querySelectorAll('.project-item');
+const preview = document.getElementById('project-preview');
+
+document.addEventListener('mousemove', (e) => {
+    // Move the preview to mouse position
+    // Adding a slight offset or exact center
+    if (preview.style.opacity === '1') {
+        const x = e.clientX;
+        const y = e.clientY;
+        
+        // Use requestAnimationFrame for smoother following if needed, 
+        // but direct style update is usually fine for simple follow in modern browsers
+        preview.style.left = `${x}px`;
+        preview.style.top = `${y}px`;
+        
+        // Optional: Tilt effect based on movement could go here
+    }
+});
+
+items.forEach(item => {
+    item.addEventListener('mouseenter', () => {
+        const imageUrl = item.getAttribute('data-image');
+        if (imageUrl) {
+            preview.style.backgroundImage = `url(${imageUrl})`;
+        } else {
+            // Fallback if no image
+            preview.style.backgroundImage = 'linear-gradient(45deg, #111, #222)';
+        }
+        
+        preview.style.opacity = '1';
+        preview.style.transform = 'translate(-50%, -50%) scale(1)';
+    });
+
+    item.addEventListener('mouseleave', () => {
+        preview.style.opacity = '0';
+        preview.style.transform = 'translate(-50%, -50%) scale(0.8)';
+    });
+});
+
+// --- Custom Cursor Logic ---
+const cursor = document.querySelector('.custom-cursor');
+
+document.addEventListener('mousemove', (e) => {
+    // Simple direct follow for snappiness
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+});
+
+// Hide default cursor generally or just let them coexist?
+// Ideally we hide the default cursor on body if we are confident
+document.body.style.cursor = 'none';
+
+// Re-enable default cursor for some interactions if needed, but for brutalist feel, full custom is good.
+// But we need to make sure links are clickable. They are.
 
 animateFoguete();

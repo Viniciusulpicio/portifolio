@@ -2,11 +2,11 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Portfólio</title>
+  <title>Portfólio | Vinicius Sulpicio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./style.css">
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Geologica&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css?v=7.0">
+  <script type="module" src="./script.js?v=7.0"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
   <script type="importmap">
     {
       "imports": {
@@ -17,165 +17,274 @@
   </script>
 </head>
 <body>
+</head>
+<body>
+    <!-- Background Layers -->
+    <svg style="display: none;">
+        <filter id="noiseFilter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.6" stitchTiles="stitch"/>
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.5 0"/>
+        </filter>
+    </svg>
+    <div class="noise-overlay"></div>
+    <div class="background-mesh"></div>
+    <div class="custom-cursor"></div>
+    
     <div id="particles-js"></div>
-    <nav class="navbar">
-    <button class="menu-btn"><img src="./image/fi-br-menu-burger.png" alt=""></button>
-    <div class="social-icons">
-      <a href="https://x.com/vini_sulpicio" target="_blank" aria-label="X/Twitter">
-        <img src="./image/X.png" alt="X Icon" />
-      </a>
-      <a href="www.linkedin.com/in/vinicius-sulpicio" target="_blank" aria-label="LinkedIn">
-        <img src="./image/linkedin 1.png" alt="LinkedIn Icon" />
-      </a>
-      <a href="https://github.com/Viniciusulpicio" target="_blank" aria-label="GitHub">
-        <img src="./image/github 1.png" alt="GitHub Icon" />
-      </a>
-    </div>
-  </nav>
-
-<div class="sidebar" id="sidebar">
-  <button id="fechar-menu" style="position:absolute;top:20px;right:20px;font-size:32px;background:none;border:none;color:#b8a1f7;">×</button>
-  <ul>
-    <li><a href="#home">Sobre Mim</a></li>
-    <li><a href="#about">Experiências</a></li>
-    <li><a href="#projects">Projetos</a></li>
-    <li><a href="#contact"></a></li>
-  </ul>
-</div>
-
-  <div id="tv-container">
-    <video id="video-texture" src="./assets/video_final.mp4" autoplay loop muted playsinline style="display: none;"></video>
-  </div>
-
-  <div class="spacer"></div>
-
-<section class="conteudo-normal sobre-container">
-
-  <div class="titulo-sobre-wrapper">
-    <h2 class="titulo-centralizado">Sobre Mim</h2>
-  </div>
-
-  <div class="sobre-texto">
-    <p>
-      Meu nome é Vinicius Sulpicio e sou um desenvolvedor full stack apaixonado por programação. 
-      Trabalho nas principais linguagens, tecnologias e frameworks, como HTML, CSS, JavaScript, Node.js, 
-      SQL, MySQL, Flutter, e React.
-    </p>
-    <p>
-      Possuo experiência prática em criação de sistemas web, APIs com Express e integração com banco de dados. 
-      Dê uma olhada logo abaixo em alguns dos projetos realizados durante meu processo de aprendizagem dentro 
-      desse mundo da programação.
-    </p>
-  </div>
-
-  <div id="vinil-container"></div>
-</section>
-
-
-<div id="formacao-foguete-container" style="position: relative; display: flex; justify-content: center; align-items: center;   overflow: visible !important; ">
-  <div id="texto-fixo" style="
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -20%);
-    font-weight: bold;
-    pointer-events: none;
-    font-family: 'Geologica', sans-serif;
-    user-select: none;
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    background-color: #1a1a1a;
-    color: #b8a1f7;
-    display: inline-block;
-    width: 25%;
-    z-index: 1;
-    width: fit-content;
-    padding: 10px 20px;
-    white-space: nowrap;
-  ">
-  Minhas experiências
-  </div>
-</div>
-
-<div class="formacao-container">
-  <div class="titulo">Formação Acadêmica</div>
-
-  <div class="linha-tempo">
-    <div class="lado-esquerdo">
-      <div class="item">
-        <div class="instituicao">Micropro</div>
-        <div class="ano">2022 - 2024</div>
-        <div class="tags">
-          <div class="tag">Administração</div>
-          <div class="tag">Microsoft Office</div>
+    
+    <nav class="navbar glass-panel" style="border-radius: 50px; padding: 10px 20px;">
+        <button class="menu-btn" aria-label="Menu">
+            <img src="./image/fi-br-menu-burger.png" alt="">
+        </button>
+        <div class="social-icons">
+            <a href="https://x.com/vini_sulpicio" target="_blank" aria-label="X/Twitter">
+                <img src="./image/X.png" alt="X" />
+            </a>
+            <a href="https://www.linkedin.com/in/vinicius-sulpicio" target="_blank" aria-label="LinkedIn">
+                <img src="./image/linkedin 1.png" alt="LinkedIn" />
+            </a>
+            <a href="https://github.com/Viniciusulpicio" target="_blank" aria-label="GitHub">
+                <img src="./image/github 1.png" alt="GitHub" />
+            </a>
         </div>
-      </div>
+    </nav>
 
-      <div class="item">
-        <div class="instituicao">SENAI</div>
-        <div class="ano">2023 - Atualmente</div>
-        <div class="tags">
-          <div class="tag">HTML</div>
-          <div class="tag">CSS</div>
-          <div class="tag">JavaScript</div>
-          <div class="tag">Node.js</div>
-          <div class="tag">React</div>
-          <div class="tag">SQL</div>
-          <div class="tag">MySQL</div>
-          <div class="tag">Flutter</div>
+    <div class="sidebar" id="sidebar">
+        <button id="fechar-menu" style="position:absolute;top:30px;right:30px;background:none;border:none;cursor:pointer;">&times;</button>
+        <ul>
+            <li><a href="#about">Sobre Mim</a></li>
+            <li><a href="#experience">Experiências</a></li>
+            <li><a href="#projects">Projetos</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero / TV Section -->
+    <div id="tv-container">
+        <video id="video-texture" src="./assets/video_final.mp4" autoplay loop muted playsinline style="display: none;"></video>
+    </div>
+
+    <div class="spacer-hero"></div>
+
+            <!-- Sobre Mim Section -->
+    <section id="about" class="conteudo-normal">
+        <div class="titulo-sobre-wrapper">
+          <h2 class="titulo-centralizado">Sobre Mim</h2>
         </div>
-      </div>
-
-      <!-- Novo item futuro -->
-      <div class="item">
-        <div class="instituicao">Universidade XYZ</div>
-        <div class="ano">2025 - ?</div>
-        <div class="tags">
-          <div class="tag">Engenharia de Software</div>
+        
+        <div class="sobre-container">
+            <div class="sobre-texto glass-panel">
+                <p>
+                    <strong>Desenvolvedor Full Stack</strong> com foco em soluções eficientes e escaláveis, atualmente graduando em <strong>Inteligência Artificial pela UNIMAR</strong>.
+                </p>
+                <p>
+                    Possuo sólida base técnica em desenvolvimento web (<strong>Node.js, React, TypeScript</strong>) e mobile (<strong>Flutter</strong>). 
+                    Experiência prática em automação de processos, administração de sistemas Linux e integração de APIs.
+                </p>
+                <p>
+                     Perfil proativo, com histórico de entrega de projetos reais e pesquisa constante em novas tecnologias.
+                </p>
+                <!-- Download CV Button -->
+                 <a href="./image/Curriculo.pdf" target="_blank" class="btn-print" download>
+                    <span class="icon"></span> Baixar Currículo PDF
+                 </a>
+            </div>
+            <div id="vinil-container"></div>
         </div>
-      </div>
+    </section>
+
+    <div class="spacer"></div>
+
+    <!-- Experiências Section -->
+    <section id="experience" style="position: relative;">
+        <div id="formacao-foguete-container">
+            <h2 id="texto-fixo">Minha Jornada</h2>
+        </div>
+
+        <div class="formacao-container">
+            <h3 class="titulo">Formação Acadêmica & Experiência</h3>
+
+            <div class="linha-tempo">
+                <!-- Item 1: UNIMAR -->
+                <div class="item">
+                    <div class="left-content">
+                        <div class="ano">2026 - ATUALMENTE</div>
+                        <div class="instituicao">UNIMAR</div>
+                        <div class="tags">
+                            <div class="tag">Inteligência Artificial</div>
+                            <div class="tag">Bacharelado</div>
+                        </div>
+                    </div>
+                    <div class="right-content">
+                        <p class="descricao">
+                            Graduação em Inteligência Artificial. Foco em algoritmos avançados, modelos preditivos e desenvolvimento de aplicações inteligentes.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Item 2: SENAI -->
+                <div class="item">
+                    <div class="left-content">
+                        <div class="ano">2026 (Conclusão)</div>
+                        <div class="instituicao">SENAI</div>
+                        <div class="tags">
+                            <div class="tag">Node.js</div>
+                            <div class="tag">React</div>
+                            <div class="tag">MySQL</div>
+                            <div class="tag">APIs REST</div>
+                        </div>
+                    </div>
+                    <div class="right-content">
+                        <p class="descricao">
+                            Curso Técnico em Desenvolvimento de Sistemas. Desenvolvimento de projetos full stack, autenticação JWT, estruturação de bancos relacionais e boas práticas.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Item 3: Project Highlight -->
+                <div class="item destaque-projeto">
+                    <div class="left-content">
+                        <div class="ano">PROJETO DESTAQUE</div>
+                        <div class="instituicao">tiaresalgados.com.br</div>
+                        <div class="tags">
+                            <div class="tag">Full Stack</div>
+                            <div class="tag">Mercado Pago</div>
+                            <div class="tag">Impressão Térmica</div>
+                        </div>
+                    </div>
+                     <div class="right-content">
+                        <p class="descricao">
+                            Sistema completo de pedidos online. Integração com pagamentos via Mercado Pago, painel administrativo e sistema híbrido para impressão térmica local de pedidos.
+                            <br><em>Techs: Node.js, Express, Sequelize, MySQL.</em>
+                        </p>
+                    </div>
+                </div>
+
+                 <!-- Item 4: Micropro -->
+                <div class="item">
+                    <div class="left-content">
+                        <div class="ano">2022 - 2024</div>
+                        <div class="instituicao">Micropro</div>
+                        <div class="tags">
+                            <div class="tag">Gestão</div>
+                            <div class="tag">Profissional Administrativo</div>
+                        </div>
+                    </div>
+                    <div class="right-content">
+                        <p class="descricao">
+                            Formação profissionalizante em rotinas administrativas e tecnologia.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section (Brutalist Style) -->
+    <section id="projects" class="conteudo-normal" style="max-width: 100%; padding: 0 5%;">
+        <div class="projects-list">
+            <!-- Project 1: Tia Re Salgados -->
+            <a href="https://tiaresalgados.com.br" target="_blank" class="project-item" data-image="./image/tiare.png" style="text-decoration: none;">
+                <span class="p-year">2024</span>
+                <span class="p-name">Tia Re Salgados</span>
+                <span class="p-type">E-commerce</span>
+            </a>
+
+            <!-- Project 2: Portfólio 3D (No Link) -->
+            <div class="project-item" data-image="./image/portifolio.png">
+                <span class="p-year">2025</span>
+                <span class="p-name">Portfólio 3D</span>
+                <span class="p-type">Creative Dev</span>
+            </div>
+
+            <!-- Project 3: Jammer Bluetooth (No Link) -->
+            <div class="project-item" data-image="./image/jammer.png">
+                <span class="p-year">2023</span>
+                <span class="p-name">Jammer Bluetooth</span>
+                <span class="p-type">Hardware / IoT</span>
+            </div>
+            
+             <!-- Project 4: Rice Arch Linux -->
+            <a href="https://github.com/Viniciusulpicio/dotfiles-arch" target="_blank" class="project-item" data-image="./image/arch.png" style="text-decoration: none;">
+                <span class="p-year">2024</span>
+                <span class="p-name">Rice Arch Linux</span>
+                <span class="p-type">System / Config</span>
+            </a>
+        </div>
+
+        <!-- Floating Image Container -->
+        <div id="project-preview"></div>
+    </section>
+
+    <!-- Tech Stack Marquee -->
+    <div class="tech-marquee-container">
+        <div class="tech-marquee">
+            <div class="tech-track">
+                <!-- Duplicate items for infinite scroll effect -->
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML"> HTML</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS"> CSS</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS"> JavaScript</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS"> TypeScript</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React"> React</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node"> Node.js</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter"> Flutter</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="SQL"> MySQL</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git"> Git</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="Linux"> Linux</div>
+                
+                <!-- Doubled for seamless loop -->
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML"> HTML</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS"> CSS</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS"> JavaScript</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TS"> TypeScript</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React"> React</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node"> Node.js</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" alt="Flutter"> Flutter</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="SQL"> MySQL</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git"> Git</div>
+                <div class="tech-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="Linux"> Linux</div>
+            </div>
+        </div>
     </div>
 
-    <div class="linha-centro">
-      <div class="ponto"><img src="./image/micropro.png" alt="" width="75%"></div>
-      <div class="ponto" style="font-style: italic;">S</div>
-      <div class="ponto">?</div> <!-- novo ponto interrogação -->
-    </div>
+    <!-- Footer (Ram Maheshwari Style) -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-left">
+                    <h3>VINICIUS SULPICIO</h3>
+                    <p>
+                        Desenvolvedor Full Stack focado em construir o Frontend de Sites e Aplicações Web que levam ao sucesso do produto geral.
+                    </p>
+                </div>
+                <div class="footer-right">
+                    <h3>SOCIAL</h3>
+                    <div class="footer-icons">
+                        <a href="https://www.linkedin.com/in/vinicius-sulpicio" target="_blank">
+                            <img src="./image/linkedin 1.png" alt="LinkedIn">
+                        </a>
+                        <a href="https://github.com/Viniciusulpicio" target="_blank">
+                            <img src="./image/github 1.png" alt="Github">
+                        </a>
+                        <a href="https://x.com/vini_sulpicio" target="_blank">
+                            <img src="./image/X.png" alt="Twitter">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-line"></div>
+            
+            <div class="footer-bottom">
+                <p>&copy; Copyright 2026 . Made by <a href="#">Vinicius Sulpicio</a></p>
+            </div>
+        </div>
+    </footer>
 
-    <div class="lado-direito">
-      <div class="item">
-        <p><strong>Em 2022...</strong><br>
-        Escreva sobre a Micropro aqui, destacando sua experiência com administração e informática básica.</p>
-      </div>
 
-      <div class="item">
-        <p class="descricao">
-          Em 2023, junto ao ensino médio, comecei a cursar o técnico de Desenvolvimento de Sistemas na escola SENAI “Shunji Nishimura”. Foi nesse período que toda minha jornada na programação se iniciou, então, durante o curso, produzi alguns projetos interessantes.
-        </p>
-      </div>
-
-      <!-- Novo texto futuro -->
-      <div class="item">
-        <p class="descricao">
-          A partir de 2025, pretendo iniciar a graduação em Engenharia de Software na Universidade XYZ. Uma etapa que ainda está por vir e cheia de expectativas!
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  
-
-  <script type="module" src="script.js"></script>
-  <script>
-    particlesJS.load('particles-js', './particlesjs-config.json', function () {
-      console.log('Particles.js config carregado com sucesso!');
-    });
-  </script>
+    <script>
+        particlesJS.load('particles-js', './particlesjs-config.json', function () {
+            console.log('Particles.js loaded');
+        });
+    </script>
 </body>
-
-
 </html>
-
