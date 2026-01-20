@@ -266,25 +266,40 @@ body:has(.project-item:hover) .custom-cursor {
 /* Responsive */
 @media (max-width: 768px) {
   .titulo-centralizado {
-      font-size: 3rem;
+      font-size: 2.2rem; /* Even smaller for better fit */
+      margin-bottom: 0.5rem;
   }
   
   #texto-fixo {
-      font-size: 3rem;
+      font-size: 2.2rem;
   }
 
   .sobre-container {
       flex-direction: column;
-      gap: 40px;
+      gap: 30px;
+  }
+
+  /* Make the disk smaller on mobile */
+  #vinil-container {
+      width: 250px;
+      height: 250px;
+      margin: 0 auto;
   }
 
   .item {
       flex-direction: column;
-      gap: 20px;
+      gap: 15px;
+      padding: 30px 20px; /* Reduced padding */
+      align-items: flex-start; /* Ensure left alignment */
   }
   
   .item .right-content {
       padding-left: 0;
+  }
+  
+  /* Reset left border dot position for mobile if needed */
+  .item::before {
+      left: -27px; /* Keep consistent with desktop or adjust */
   }
 }
 
@@ -530,6 +545,12 @@ body:has(.project-item:hover) .custom-cursor {
   margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+    .conteudo-normal {
+        padding: 40px 15px; /* Tighter padding for mobile */
+    }
+}
+
 /* Sobre Mim */
 .titulo-sobre-wrapper {
   text-align: center;
@@ -573,6 +594,18 @@ body:has(.project-item:hover) .custom-cursor {
   line-height: 1.8;
   color: var(--text-gray);
   margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .sobre-texto p {
+      font-size: 1rem; /* Better readability on small screens */
+      line-height: 1.6;
+      margin-bottom: 15px;
+  }
+  
+  .sobre-texto {
+      padding: 25px; /* Less inner padding */
+  }
 }
 
 #vinil-container {

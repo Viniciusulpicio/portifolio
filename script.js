@@ -54,7 +54,7 @@ loader.load("./models/TVVIDEOFINAL.glb", (gltf) => {
   model3D.rotation.set(0, 0, 0);
   scene.add(model3D);
 
-  if (isMobile) model3D.rotation.y = Math.PI / 2;
+  if (isMobile) model3D.rotation.y = 0;
 
   const video = document.getElementById("video-texture");
   video.muted = true;
@@ -149,12 +149,14 @@ function animate() {
   if (model3D) {
     const z = THREE.MathUtils.lerp(2, -6, scrollPercent);
     const x = THREE.MathUtils.lerp(0, -4, scrollPercent);
-    const y = THREE.MathUtils.lerp(0, 6, scrollPercent);
+    // Lift TV slightly on mobile start to be more centered
+    const startY = isMobile ? 0.5 : 0; 
+    const y = THREE.MathUtils.lerp(startY, 6, scrollPercent);
 
     model3D.position.set(x, y, z);
 
     let targetRotY = isMobile
-      ? THREE.MathUtils.lerp(Math.PI / 2, 0, scrollPercent)
+      ? THREE.MathUtils.lerp(0, Math.PI / 2, scrollPercent)
       : THREE.MathUtils.lerp(0, Math.PI / 2, scrollPercent);
 
     model3D.rotation.y += (targetRotY - model3D.rotation.y) * 0.05;
@@ -210,7 +212,12 @@ vinilCamera.position.z = 5;
 
 const vinilRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 function ajustarTamanhoVinil() {
-  const tamanho = window.innerWidth * 0.22;
+  let tamanho;
+  if (window.innerWidth < 768) {
+    tamanho = 250; // Match CSS mobile size
+  } else {
+    tamanho = window.innerWidth * 0.22;
+  }
   vinilRenderer.setSize(tamanho, tamanho);
 
   vinilCamera.aspect = 1;
@@ -358,9 +365,9 @@ loaderFoguete.load(
 
     // Reverting to original scale
     fogueteModel.scale.set(
-      isMobile ? 120 : 50,
-      isMobile ? 120 : 50,
-      isMobile ? 120 : 50,
+      isMobile ? 40 : 50,
+      isMobile ? 40 : 50,
+      isMobile ? 40 : 50,
     );
     fogueteScene.add(fogueteModel);
   },
