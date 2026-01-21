@@ -449,7 +449,8 @@ body:has(.project-item:hover) .custom-cursor {
 .sidebar {
   position: fixed;
   top: 0;
-  left: -100%;
+  left: 0; /* Align to left edge */
+  transform: translateX(-100%); /* Start hidden off-screen */
   width: 100vw;
   height: 100vh;
   background: #050510; /* Match body deep color */
@@ -464,7 +465,7 @@ body:has(.project-item:hover) .custom-cursor {
 }
 
 .sidebar.active {
-  left: 0;
+  transform: translateX(0); /* Slide in */
   box-shadow: 100px 0 0 rgba(0,0,0,0.5); /* Massive shadow when open */
 }
 
@@ -1230,4 +1231,308 @@ body:has(.project-item:hover) .custom-cursor {
   .tags {
     display: none !important; /* Optional: hide tags on print if too messy, or style them simpler */
   }
+}
+.zoom-portal {
+  position: relative;
+  height: 300vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 20;
+}
+
+.sticky-content {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.zooming-text {
+  font-size: 5rem;
+  font-weight: 900;
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  margin: 0;
+  background: -webkit-linear-gradient(45deg, #fff, var(--primary-color));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.about-content-hidden {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  margin-top: -50vh; 
+}
+
+.about-content-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .zooming-text {
+        font-size: 3rem;
+    }
+}
+
+#footer-fire-container {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%; /* Or specific height */
+  pointer-events: none;
+  z-index: 0;
+}
+
+.footer {
+    position: relative; /* Ensure container is positioned relative to footer */
+    overflow: hidden; /* optional, to clip if needed */
+}
+
+/* Ensure footer content is above the fire */
+.footer-container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Wyvern (Dragon) Container */
+#wyvern-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 400px;
+    z-index: 5; /* Above background, below navbar? Navbar is 1000. */
+    pointer-events: none; /* Let clicks pass through */
+}
+
+@media (max-width: 768px) {
+    #wyvern-container {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+/* Civic 98 Container */
+#civic-container {
+    position: absolute;
+    bottom: -50px; /* Slight offset */
+    right: 0;
+    width: 600px;
+    height: 400px;
+    z-index: 5; 
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    #civic-container {
+        width: 300px;
+        height: 200px;
+        bottom: 0;
+    }
+}
+/* === Civic 98 Multi-Location Styles === */
+
+/* 1. Hero: Beside TV */
+#civic-hero {
+  position: absolute;
+  bottom: -50px;
+  left: 10%;
+  width: 300px;
+  height: 200px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* 2. Fixed Bottom-Right */
+#civic-fixed {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 250px;
+  height: 150px;
+  z-index: 1000; /* High z-index to sit on top */
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Helper to see outline */
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* 3. Marquee: Above Footer */
+#civic-marquee {
+  position: absolute;
+  top: -150px; /* Above the marquee strip */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 300px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 4. Sidebar: Inside Menu */
+#civic-sidebar {
+  width: 200px;
+  height: 150px;
+  margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Sidebar Layout Update for Fantasy House */
+.sidebar {
+    /* Existing has display:flex, col, center */
+    /* We want row for desktop */
+    flex-direction: row !important; 
+    justify-content: center !important; /* Bring them closer to center */
+    align-items: center;
+    padding: 0 5%;
+    gap: 5%; /* Control distance between links and house */
+    overflow: hidden !important; /* Prevent scroll inside sidebar or from sidebar */
+}
+
+.sidebar ul {
+    text-align: left !important; /* Align links to left maybe? or Keep center but in a block */
+    flex: 0 0 auto; /* Don't stretch indefinitely, just take needed space */
+    z-index: 2002; /* Above house if overlap */
+    min-width: 250px; /* Ensure links take space */
+}
+
+#house-container {
+    flex: 1;
+    max-width: 50vw; /* Prevent it from being wider than half screen */
+    height: 60vh; /* Relative height */
+    min-height: 400px;
+    display: flex; /* Centering if needed */
+    justify-content: center;
+    align-items: center;
+    z-index: 2001;
+    position: relative;
+    /* Optional: background: rgba(255,255,255,0.05); to see it */
+}
+
+#house-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
+
+/* Mobile: Hide house or stack? 97MB is heavy for mobile... maybe hide? */
+@media (max-width: 900px) {
+    .sidebar {
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+    #house-container {
+        display: none; /* Hide on mobile/tablet to save data/perf */
+    }
+    .sidebar ul {
+        text-align: center !important;
+    }
+}
+
+/* --- Loading Screen (System Init Style) --- */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #050510; /* Deepest black/blue */
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #fff;
+  font-family: 'Geologica', monospace; /* Tech feel */
+  transition: opacity 0.8s ease-in-out, visibility 0.8s;
+}
+
+.loading-screen.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-content {
+  text-align: center;
+  width: 300px;
+  position: relative;
+}
+
+.loader-logo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  margin-bottom: 40px;
+  color: #aaa;
+  text-transform: uppercase;
+  animation: pulse 2s infinite;
+}
+
+.loader-status {
+  font-size: 0.9rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  text-align: left;
+  font-family: monospace;
+  text-transform: uppercase;
+}
+
+#loader-percentage {
+  font-size: 4rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+  font-variant-numeric: tabular-nums; /* Prevent jitter */
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--primary-color);
+  box-shadow: 0 0 10px var(--primary-color);
+  transition: width 0.1s linear; /* Smooth fill */
+}
+
+.loader-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #555;
+  font-family: monospace;
+  margin-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 10px;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
 }

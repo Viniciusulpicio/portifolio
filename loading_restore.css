@@ -1,0 +1,59 @@
+/* --- Restored Loading Screen (Space/Brutalist) --- */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+}
+
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-content {
+    text-align: center;
+    position: relative;
+    /* Optional: Add a subtle pulse or glitch effect container here */
+}
+
+#loader-percentage {
+    font-family: 'Geologica', sans-serif;
+    font-size: 8rem; /* Massive */
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 2px white; /* Hollow style matches Sobre Mim */
+    margin: 0;
+    letter-spacing: -5px;
+    font-variant-numeric: tabular-nums; /* Keeps numbers from jumping width */
+    position: relative;
+}
+
+/* Optional: Add a small 'processing' blinker below */
+#loader-percentage::after {
+    content: '_';
+    font-size: 2rem;
+    position: absolute;
+    bottom: 20px;
+    right: -40px;
+    animation: blink 1s infinite;
+    -webkit-text-stroke: 0;
+    color: var(--primary-color);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+body.loading {
+    overflow: hidden;
+}
